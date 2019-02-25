@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <style>
+      .arrow:hover {
+        fill: #201e1f;
+        opacity: 1;
+      }
+    </style>
+  </head>
+
+  <body>
+    <svg
+      id="svgOne"
+      xmlns="http://www.w3.org/2000/svg"
+      width="5000"
+      height="3000"
+    >
+      <defs>
+        <circle id="myCircle" cx="0" cy="0" r="15" />
+        <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z" />
+
+        <path id="arrowLeft" d="M14 7l-5 5 5 5V7z" />
+        <path fill="none" d="M0 0h24v24H0V0z" />
+        <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" />
+
+        <path id="arrowRight" d="M10 17l5-5-5-5v10z" />
+        <path
+          id="arrow"
+          d="M345.441,248.292L151.154,442.573c-12.359,12.365-32.397,12.365-44.75,0c-12.354-12.354-12.354-32.391,0-44.744
+		L278.318,225.92L106.409,54.017c-12.354-12.359-12.354-32.394,0-44.748c12.354-12.359,32.391-12.359,44.75,0l194.287,194.284
+		c6.177,6.18,9.262,14.271,9.262,22.366C354.708,234.018,351.617,242.115,345.441,248.292z"
+        />
+        <linearGradient id="myGradient" gradientTransform="rotate(90)">
+          <stop offset="100%" stop-color="black" />
+          <stop offset="0%" stop-color="gray" />
+        </linearGradient>
+      </defs>
+      <rect x="0" y="0" width="100%" height="100%" fill="#052838" />
+    </svg>
+    <script>
+      var svgns = 'http://www.w3.org/2000/svg';
+      var x = 0;
+      var y = 0;
+      var h = 40;
+      var w = 150;
+      for (var i = 0; i < 10; i++) {
+        var rect = document.createElementNS(svgns, 'rect');
+        var color = '#' + Math.round(0xffffff * Math.random()).toString(16);
+        rect.setAttributeNS(null, 'x', x);
+        rect.setAttributeNS(null, 'y', y);
+        rect.setAttributeNS(null, 'height', h);
+        rect.setAttributeNS(null, 'width', w);
+        rect.setAttributeNS(null, 'fill', color);
+        document.getElementById('svgOne').appendChild(rect);
+
+        var circleStart = document.createElementNS(svgns, 'circle');
+        circleStart.setAttributeNS(null, 'cx', x);
+        circleStart.setAttributeNS(null, 'cy', y + h / 2);
+        circleStart.setAttributeNS(null, 'r', h / 2);
+        //circle.setAttributeNS(null, 'style', 'fill: none; stroke: blue; stroke-width: 1px;' );
+        circleStart.setAttributeNS(null, 'fill', color);
+        document.getElementById('svgOne').appendChild(circleStart);
+
+        var circleEnd = document.createElementNS(svgns, 'circle');
+        circleEnd.setAttributeNS(null, 'cx', x + w);
+        circleEnd.setAttributeNS(null, 'cy', y + h / 2);
+        circleEnd.setAttributeNS(null, 'r', h / 2);
+        circleEnd.setAttributeNS(null, 'class', 'arrow');
+        //circleEnd.setAttributeNS(null, 'style', 'fill: none; stroke: blue; stroke-width: 1px;' );
+        circleEnd.setAttributeNS(null, 'fill', color);
+
+        //circleStart.style.stroke = 'black';
+        circleStart.style.stroke.width = '3';
+        //circleEnd.style.stroke = 'black';
+        //circleEnd.style.stroke.width = '3';
+        document.getElementById('svgOne').appendChild(circleEnd);
+
+        var scale = 1;
+
+        var startArrow = createUseElement({
+          x: x - 10,
+          y: y + h / 2 - 10,
+          href: 'arrowLeft',
+          fillId: 'myGradient',
+          scale: scale
+        });
+        document.getElementById('svgOne').appendChild(startArrow);
+
+        var endArrow = createUseElement({
+          x: x + w - 10,
+          y: y + h / 2 - 10,
+          href: 'arrowRight',
+          fillId: 'myGradient',
+          scale: scale
+        });
+        document.getElementById('svgOne').appendChild(endArrow);
+
+        makeDraggable(rect, circleStart, circleEnd, startArrow, endArrow, {
+          scale: 1
+        });
+
+        y += h;
+        x += 10;
+      }
+
+      function createUseElement(options) {
+        //<use x="200" y="15" xlink:href="#myCircle" fill="url('#myGradient')" />
+        var xmlns = 'http://www.w3.org/2000/svg';
+        var xlinkns = 'http://www.w3.org/1999/xlink';
+        var use = document.createElementNS(xmlns, 'use');
+
+        var scale = options.scale || 1;
+        var angle = options.angle || 0;
+        var s =
+          'scale(' + scale + ') rotate(' + angle + ' ' + 0 + ' ' + 0 + ')';
+        use.setAttributeNS(null, 'transform', s);
+        //use.setAttributeNS(null, 'transform-origin', '50% 50%');
+        //   var t =
+        //     'translate(' +
+        //     randomPos(width) +
+        //     ',' +
+        //     randomPos(height) +
+        //     ') ' +
+        //     'scale(' +
+        //     randomScaleNamed(name) +
+        //     ')';
+        //use.setAttributeNS(null, 'class', name);
+        use.setAttributeNS(null, 'x', options.x * (1 / scale));
+        use.setAttributeNS(null, 'y', options.y * (1 / scale));
+        use.setAttributeNS(xlinkns, 'xlink:href', '#' + options.href);
+        use.setAttributeNS(null, 'fill', `url('#${options.fillId}')`);
+        return use;
+      }
+
+      function makeDraggable(
+        middle,
+        start,
+        end,
+        arrowStart,
+        arrowEnd,
+        options
+      ) {
+        var scale = options.scale;
+        var middleRect = middle;
+        var startCircle = start;
+        var endCircle = end;
+        middleRect.addEventListener('mousedown', startDrag);
+        middleRect.addEventListener('mousemove', drag);
+        middleRect.addEventListener('mouseup', endDrag);
+        middleRect.addEventListener('mouseleave', endDrag);
+        var centerRect, offset;
+
+        function startDrag(evt) {
+          centerRect = evt.target;
+          offset = getMousePosition(evt);
+          offset.x -= parseFloat(centerRect.getAttributeNS(null, 'x'));
+          offset.y -= parseFloat(centerRect.getAttributeNS(null, 'y'));
+        }
+
+        function getMousePosition(evt) {
+          var CTM = middleRect.getScreenCTM();
+          return {
+            x: (evt.clientX - CTM.e) / CTM.a,
+            y: (evt.clientY - CTM.f) / CTM.d
+          };
+        }
+
+        function drag(evt) {
+          if (centerRect) {
+            evt.preventDefault();
+            var coord = getMousePosition(evt);
+            var xBefore = parseFloat(centerRect.getAttributeNS(null, 'x'));
+            centerRect.setAttributeNS(null, 'x', coord.x - offset.x);
+            var xAfter = parseFloat(centerRect.getAttributeNS(null, 'x'));
+            var xStartCircle = parseFloat(
+              startCircle.getAttributeNS(null, 'cx')
+            );
+            var dt = xAfter - xBefore;
+            startCircle.setAttributeNS(null, 'cx', xStartCircle + dt);
+
+            var xEndCircle = parseFloat(endCircle.getAttributeNS(null, 'cx'));
+            endCircle.setAttributeNS(null, 'cx', xEndCircle + dt);
+
+            var xStartArrow = parseFloat(arrowStart.getAttributeNS(null, 'x'));
+            arrowStart.setAttributeNS(
+              null,
+              'x',
+              xStartArrow + (dt * 1) / scale
+            );
+
+            var xEndArrow = parseFloat(arrowEnd.getAttributeNS(null, 'x'));
+            arrowEnd.setAttributeNS(null, 'x', xEndArrow + (dt * 1) / scale);
+
+            //selectedElement.setAttributeNS(null, "y", coord.y - offset.y);
+          }
+        }
+
+        function endDrag(evt) {
+          centerRect = null;
+        }
+      }
+    </script>
+  </body>
+</html>
