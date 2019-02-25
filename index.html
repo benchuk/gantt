@@ -60,6 +60,7 @@
         circleStart.setAttributeNS(null, 'r', h / 2);
         //circle.setAttributeNS(null, 'style', 'fill: none; stroke: blue; stroke-width: 1px;' );
         circleStart.setAttributeNS(null, 'fill', color);
+        circleStart.setAttributeNS(null, 'class', 'arrow');
         document.getElementById('svgOne').appendChild(circleStart);
 
         var circleEnd = document.createElementNS(svgns, 'circle');
@@ -145,21 +146,51 @@
         var middleRect = middle;
         var startCircle = start;
         var endCircle = end;
+        var svgRoot = document.getElementById('svgOne');
         middleRect.addEventListener('mousedown', startDrag);
-        middleRect.addEventListener('mousemove', drag);
-        middleRect.addEventListener('mouseup', endDrag);
-        middleRect.addEventListener('mouseleave', endDrag);
+        //middleRect.addEventListener('mousemove', drag);
+        //middleRect.addEventListener('mouseup', endDrag);
+        //middleRect.addEventListener('mouseleave', endDrag);
+
+        //startCircle.addEventListener('mousedown', startDragStartArrow);
+        //startCircle.addEventListener('mousemove', dragStartArrow);
+        //startCircle.addEventListener('mouseup', endDragStartArrow);
+        //startCircle.addEventListener('mouseleave', endDragStartArrow);
+
+        endCircle.addEventListener('mousedown', startDragEndArrow);
+        //endCircle.addEventListener('mousemove', dragEndArrow);
+        svgRoot.addEventListener('mouseup', endDrag);
+        //endCircle.addEventListener('mouseleave', endDragEndArrow);
+
+        svgRoot.addEventListener('mousemove', drag);
+
+        var startCircleSelected, offsetStart;
+        var endCircleSelected, offsetEnd;
         var centerRect, offset;
+
+        function startDragStartArrow(evt) {
+          startCircleSelected = evt.target;
+          offsetStart = getMousePosition(evt, startCircleSelected);
+          offsetStart.x -= parseFloat(startCircle.getAttributeNS(null, 'cx'));
+          offsetStart.y -= parseFloat(startCircle.getAttributeNS(null, 'cy'));
+        }
+
+        function startDragEndArrow(evt) {
+          endCircleSelected = evt.target;
+          offsetEnd = getMousePosition(evt, endCircleSelected);
+          offsetEnd.x -= parseFloat(endCircle.getAttributeNS(null, 'cx'));
+          offsetEnd.y -= parseFloat(endCircle.getAttributeNS(null, 'cy'));
+        }
 
         function startDrag(evt) {
           centerRect = evt.target;
-          offset = getMousePosition(evt);
+          offset = getMousePosition(evt, centerRect);
           offset.x -= parseFloat(centerRect.getAttributeNS(null, 'x'));
           offset.y -= parseFloat(centerRect.getAttributeNS(null, 'y'));
         }
 
-        function getMousePosition(evt) {
-          var CTM = middleRect.getScreenCTM();
+        function getMousePosition(evt, ctrl) {
+          var CTM = ctrl.getScreenCTM();
           return {
             x: (evt.clientX - CTM.e) / CTM.a,
             y: (evt.clientY - CTM.f) / CTM.d
@@ -167,9 +198,22 @@
         }
 
         function drag(evt) {
+          if (endCircleSelected) {
+            //evt.preventDefault();
+            var coord = getMousePosition(evt, endCircleSelected);
+            var xBefore = parseFloat(middleRect.getAttributeNS(null, 'width'));
+            middleRect.setAttributeNS(null, 'width', coord.x - offsetEnd.x);
+            var xAfter = parseFloat(middleRect.getAttributeNS(null, 'width'));
+            var dt = xAfter - xBefore;
+            var xEndCircle = parseFloat(endCircle.getAttributeNS(null, 'cx'));
+            endCircle.setAttributeNS(null, 'cx', xEndCircle + dt);
+
+            var xEndArrow = parseFloat(arrowEnd.getAttributeNS(null, 'x'));
+            arrowEnd.setAttributeNS(null, 'x', xEndArrow + (dt * 1) / scale);
+          }
           if (centerRect) {
-            evt.preventDefault();
-            var coord = getMousePosition(evt);
+            //evt.preventDefault();
+            var coord = getMousePosition(evt, centerRect);
             var xBefore = parseFloat(centerRect.getAttributeNS(null, 'x'));
             centerRect.setAttributeNS(null, 'x', coord.x - offset.x);
             var xAfter = parseFloat(centerRect.getAttributeNS(null, 'x'));
@@ -198,6 +242,7 @@
 
         function endDrag(evt) {
           centerRect = null;
+          endCircleSelected = null;
         }
       }
     </script>
