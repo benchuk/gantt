@@ -15,6 +15,7 @@
       xmlns="http://www.w3.org/2000/svg"
       width="5000"
       height="3000"
+      viewBox="0 0 5000 3000"
     >
       <defs>
         <circle id="myCircle" cx="0" cy="0" r="15" />
@@ -164,33 +165,60 @@
 
         //endCircle.addEventListener('mousemove', dragEndArrow);
 
-        var startCircleSelected, offsetStart;
-        var endCircleSelected, offsetEnd;
+        var startCircleSelected, initialStateDragStart;
+        var endCircleSelected, initialStateDragEnd;
         var centerRect, offset;
 
         function startDragStartArrow(evt) {
           startCircleSelected = evt.target;
-          offsetStart = getMousePosition(evt, startCircleSelected);
-          offsetStart.x -= parseFloat(startCircle.getAttributeNS(null, 'cx'));
-          offsetStart.y -= parseFloat(startCircle.getAttributeNS(null, 'cy'));
+          initialStateDragStart = getMousePosition(evt);
+          initialStateDragStart.w = middleRect.getAttributeNS(null, 'width');
+          initialStateDragStart.middleRectStartX = parseFloat(
+            middleRect.getAttributeNS(null, 'x')
+          );
+          initialStateDragStart.offsetX = initialStateDragStart.x;
+          initialStateDragStart.arrowOffsetX = initialStateDragStart.x;
+          initialStateDragStart.offsetX -= parseFloat(
+            startCircle.getAttributeNS(null, 'cx')
+          );
+          initialStateDragStart.y -= parseFloat(
+            startCircle.getAttributeNS(null, 'cy')
+          );
+          initialStateDragStart.arrowOffsetX -= arrowStart.getAttributeNS(
+            null,
+            'x'
+          );
         }
 
         function startDragEndArrow(evt) {
           endCircleSelected = evt.target;
-          offsetEnd = getMousePosition(evt, endCircleSelected);
-          offsetEnd.x -= parseFloat(endCircle.getAttributeNS(null, 'cx'));
-          offsetEnd.y -= parseFloat(endCircle.getAttributeNS(null, 'cy'));
+          initialStateDragEnd = getMousePosition(evt);
+          initialStateDragEnd.w = middleRect.getAttributeNS(null, 'width');
+          initialStateDragEnd.offsetX = initialStateDragEnd.x;
+          initialStateDragEnd.arrowOffsetX = initialStateDragEnd.x;
+          initialStateDragEnd.offsetX -= parseFloat(
+            endCircle.getAttributeNS(null, 'cx')
+          );
+          initialStateDragEnd.y -= parseFloat(
+            endCircle.getAttributeNS(null, 'cy')
+          );
+          initialStateDragEnd.arrowOffsetX -= arrowEnd.getAttributeNS(
+            null,
+            'x'
+          );
         }
 
         function startDrag(evt) {
           centerRect = evt.target;
-          offset = getMousePosition(evt, centerRect);
+          offset = getMousePosition(evt);
           offset.x -= parseFloat(centerRect.getAttributeNS(null, 'x'));
           offset.y -= parseFloat(centerRect.getAttributeNS(null, 'y'));
         }
 
-        function getMousePosition(evt, ctrl) {
-          var CTM = ctrl.getScreenCTM();
+        //https://www.sitepoint.com/how-to-translate-from-dom-to-svg-coordinates-and-back-again/
+        //clientX and clientY are dome coordinate system in pixels
+        function getMousePosition(evt) {
+          var CTM = svgRoot.getScreenCTM();
           return {
             x: (evt.clientX - CTM.e) / CTM.a,
             y: (evt.clientY - CTM.f) / CTM.d
@@ -200,56 +228,69 @@
         function drag(evt) {
           if (startCircleSelected) {
             //evt.preventDefault();
-            offsetCenterRec = getMousePosition(evt, middleRect);
-            offsetCenterRec.x -= parseFloat(
-              middleRect.getAttributeNS(null, 'x')
-            );
-            offsetCenterRec.y -= parseFloat(
-              middleRect.getAttributeNS(null, 'y')
+            var coord = getMousePosition(evt);
+            var dt = Math.abs(
+              parseFloat(coord.x) - parseFloat(initialStateDragStart.x)
             );
 
-            var coord = getMousePosition(evt, startCircleSelected);
-            var xBefore = parseFloat(middleRect.getAttributeNS(null, 'width'));
-            var r = parseFloat(endCircle.getAttributeNS(null, 'r'));
-            //????????
             middleRect.setAttributeNS(
               null,
               'width',
-              coord.x - offsetCenterRec.x
+              parseFloat(initialStateDragStart.w) + parseFloat(dt)
             );
-            middleRect.setAttributeNS(null, 'x', coord.x);
-            var xAfter = parseFloat(middleRect.getAttributeNS(null, 'width'));
-            var dt = xAfter - xBefore;
-            var xStartCircle = parseFloat(endCircle.getAttributeNS(null, 'cx'));
-            startCircle.setAttributeNS(null, 'cx', xStartCircle + dt);
+            console.log(
+              'middleRectStartX: ' + initialStateDragStart.middleRectStartX
+            );
+            middleRect.setAttributeNS(
+              null,
+              'x',
+              initialStateDragStart.middleRectStartX - dt
+            );
 
-            var xStartArrow = parseFloat(arrowStart.getAttributeNS(null, 'x'));
+            startCircle.setAttributeNS(
+              null,
+              'cx',
+              coord.x - initialStateDragStart.offsetX
+            );
+
+            var xEndArrowBefore = parseFloat(
+              arrowStart.getAttributeNS(null, 'x')
+            );
+
             arrowStart.setAttributeNS(
               null,
               'x',
-              xStartArrow + (dt * 1) / scale
+              coord.x - initialStateDragStart.arrowOffsetX
             );
           }
           if (endCircleSelected) {
             //evt.preventDefault();
-            var coord = getMousePosition(evt, endCircleSelected);
-            var xBefore = parseFloat(middleRect.getAttributeNS(null, 'width'));
-            console.log('width', xBefore);
-            console.log('coord x', coord.x);
-            console.log('offsetEnd x', offsetEnd.x);
-            var r = parseFloat(endCircle.getAttributeNS(null, 'r'));
-            middleRect.setAttributeNS(null, 'width', coord.x - offsetEnd.x);
-            var xAfter = parseFloat(middleRect.getAttributeNS(null, 'width'));
-            var dt = xAfter - xBefore;
-            var xEndCircle = parseFloat(endCircle.getAttributeNS(null, 'cx'));
-            endCircle.setAttributeNS(null, 'cx', xEndCircle + dt);
+            var coord = getMousePosition(evt);
+            var dt = parseFloat(coord.x) - parseFloat(initialStateDragEnd.x);
+            middleRect.setAttributeNS(
+              null,
+              'width',
+              parseFloat(initialStateDragEnd.w) + parseFloat(dt)
+            );
 
-            var xEndArrow = parseFloat(arrowEnd.getAttributeNS(null, 'x'));
-            arrowEnd.setAttributeNS(null, 'x', xEndArrow + (dt * 1) / scale);
+            endCircle.setAttributeNS(
+              null,
+              'cx',
+              coord.x - initialStateDragEnd.offsetX
+            );
+
+            var xEndArrowBefore = parseFloat(
+              arrowEnd.getAttributeNS(null, 'x')
+            );
+            arrowEnd.setAttributeNS(
+              null,
+              'x',
+              coord.x - initialStateDragEnd.arrowOffsetX
+            );
           }
           if (centerRect) {
             //evt.preventDefault();
-            var coord = getMousePosition(evt, centerRect);
+            var coord = getMousePosition(evt);
             var xBefore = parseFloat(centerRect.getAttributeNS(null, 'x'));
             centerRect.setAttributeNS(null, 'x', coord.x - offset.x);
             var xAfter = parseFloat(centerRect.getAttributeNS(null, 'x'));
