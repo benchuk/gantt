@@ -2,8 +2,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <style>
-      .arrow:hover {
+      .hoverEffect:hover {
         fill: #201e1f;
+        stroke: black;
         opacity: 1;
       }
     </style>
@@ -61,14 +62,14 @@
         circleStart.setAttributeNS(null, 'r', h / 2);
         //circle.setAttributeNS(null, 'style', 'fill: none; stroke: blue; stroke-width: 1px;' );
         circleStart.setAttributeNS(null, 'fill', color);
-        circleStart.setAttributeNS(null, 'class', 'arrow');
+        circleStart.setAttributeNS(null, 'class', 'hoverEffect');
         document.getElementById('svgOne').appendChild(circleStart);
 
         var circleEnd = document.createElementNS(svgns, 'circle');
         circleEnd.setAttributeNS(null, 'cx', x + w);
         circleEnd.setAttributeNS(null, 'cy', y + h / 2);
         circleEnd.setAttributeNS(null, 'r', h / 2);
-        circleEnd.setAttributeNS(null, 'class', 'arrow');
+        circleEnd.setAttributeNS(null, 'class', 'hoverEffect');
         //circleEnd.setAttributeNS(null, 'style', 'fill: none; stroke: blue; stroke-width: 1px;' );
         circleEnd.setAttributeNS(null, 'fill', color);
 
@@ -117,6 +118,9 @@
         var s =
           'scale(' + scale + ') rotate(' + angle + ' ' + 0 + ' ' + 0 + ')';
         use.setAttributeNS(null, 'transform', s);
+        use.setAttributeNS(null, 'class', 'hoverEffect');
+        use.setAttributeNS(null, 'id', 'arrowRight');
+
         //use.setAttributeNS(null, 'transform-origin', '50% 50%');
         //   var t =
         //     'translate(' +
@@ -229,9 +233,7 @@
           if (startCircleSelected) {
             //evt.preventDefault();
             var coord = getMousePosition(evt);
-            var dt = Math.abs(
-              parseFloat(coord.x) - parseFloat(initialStateDragStart.x)
-            );
+            var dt = parseFloat(initialStateDragStart.x) - parseFloat(coord.x);
 
             middleRect.setAttributeNS(
               null,
