@@ -1,339 +1,392 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <style>
+      .hoverEffect:hover {
+        fill: #201e1f;
+        stroke: black;
+        opacity: 1;
+      }
+    </style>
+  </head>
 
-<head>
-  <style>
-    .hoverEffect:hover {
-      fill: #201e1f;
-      stroke: black;
-      opacity: 1;
-    }
-  </style>
-</head>
+  <body>
+    <svg
+      id="svgOne"
+      xmlns="http://www.w3.org/2000/svg"
+      width="800"
+      height="600"
+      viewBox="0 0 800 600"
+    >
+      <defs>
+        <circle id="myCircle" cx="0" cy="0" r="15" />
+        <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z" />
 
-<body>
-  <svg id="svgOne" xmlns="http://www.w3.org/2000/svg" width="5000" height="3000" viewBox="0 0 5000 3000">
-    <defs>
-      <circle id="myCircle" cx="0" cy="0" r="15" />
-      <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z" />
+        <path id="arrowLeft" d="M14 7l-5 5 5 5V7z" />
+        <path fill="none" d="M0 0h24v24H0V0z" />
+        <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" />
 
-      <path id="arrowLeft" d="M14 7l-5 5 5 5V7z" />
-      <path fill="none" d="M0 0h24v24H0V0z" />
-      <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" />
-
-      <path id="arrowRight" d="M10 17l5-5-5-5v10z" />
-      <path id="arrow" d="M345.441,248.292L151.154,442.573c-12.359,12.365-32.397,12.365-44.75,0c-12.354-12.354-12.354-32.391,0-44.744
+        <path id="arrowRight" d="M10 17l5-5-5-5v10z" />
+        <path
+          id="arrow"
+          d="M345.441,248.292L151.154,442.573c-12.359,12.365-32.397,12.365-44.75,0c-12.354-12.354-12.354-32.391,0-44.744
 		L278.318,225.92L106.409,54.017c-12.354-12.359-12.354-32.394,0-44.748c12.354-12.359,32.391-12.359,44.75,0l194.287,194.284
-		c6.177,6.18,9.262,14.271,9.262,22.366C354.708,234.018,351.617,242.115,345.441,248.292z" />
-      <linearGradient id="myGradient" gradientTransform="rotate(90)">
-        <stop offset="100%" stop-color="black" />
-        <stop offset="0%" stop-color="gray" />
-      </linearGradient>
-    </defs>
-    <rect x="0" y="0" width="100%" height="100%" fill="#052838" />
-  </svg>
-  <script>
-    var svgns = 'http://www.w3.org/2000/svg';
-    var x = 0;
-    var y = 0;
-    var h = 40;
-    var w = 150;
-    for (var i = 0; i < 10; i++) {
-      var rect = document.createElementNS(svgns, 'rect');
-      var color = '#' + Math.round(0xffffff * Math.random()).toString(16);
-      rect.setAttributeNS(null, 'x', x);
-      rect.setAttributeNS(null, 'y', y);
-      rect.setAttributeNS(null, 'height', h);
-      rect.setAttributeNS(null, 'width', w);
-      rect.setAttributeNS(null, 'fill', color);
-      document.getElementById('svgOne').appendChild(rect);
-
-      var circleStart = document.createElementNS(svgns, 'circle');
-      circleStart.setAttributeNS(null, 'cx', x);
-      circleStart.setAttributeNS(null, 'cy', y + h / 2);
-      circleStart.setAttributeNS(null, 'r', h / 2);
-      //circle.setAttributeNS(null, 'style', 'fill: none; stroke: blue; stroke-width: 1px;' );
-      circleStart.setAttributeNS(null, 'fill', color);
-      circleStart.setAttributeNS(null, 'class', 'hoverEffect');
-      document.getElementById('svgOne').appendChild(circleStart);
-
-      var circleEnd = document.createElementNS(svgns, 'circle');
-      circleEnd.setAttributeNS(null, 'cx', x + w);
-      circleEnd.setAttributeNS(null, 'cy', y + h / 2);
-      circleEnd.setAttributeNS(null, 'r', h / 2);
-      circleEnd.setAttributeNS(null, 'class', 'hoverEffect');
-      //circleEnd.setAttributeNS(null, 'style', 'fill: none; stroke: blue; stroke-width: 1px;' );
-      circleEnd.setAttributeNS(null, 'fill', color);
-
-      //circleStart.style.stroke = 'black';
-      circleStart.style.stroke.width = '3';
-      //circleEnd.style.stroke = 'black';
-      //circleEnd.style.stroke.width = '3';
-      document.getElementById('svgOne').appendChild(circleEnd);
+		c6.177,6.18,9.262,14.271,9.262,22.366C354.708,234.018,351.617,242.115,345.441,248.292z"
+        />
+        <linearGradient id="myGradient" gradientTransform="rotate(90)">
+          <stop offset="100%" stop-color="black" />
+          <stop offset="0%" stop-color="gray" />
+        </linearGradient>
+      </defs>
+      <rect x="0" y="0" width="100%" height="100%" fill="#052838" />
+    </svg>
+    <script>
+      var svgns = 'http://www.w3.org/2000/svg';
+      var x = 0;
+      var y = 0;
+      var h = 40;
+      var w = 150;
 
       var bBox = document.getElementById('svgOne').getBBox();
       console.log('XxY', bBox.x + 'x' + bBox.y);
       console.log('size', bBox.width + 'x' + bBox.height);
-      var roundSize = bBox.width / 7;
-      var scale = 1;
 
-      var startArrow = createUseElement({
-        x: x - 10,
-        y: y + h / 2 - 10,
-        href: 'arrowLeft',
-        fillId: 'myGradient',
-        scale: scale
-      });
-      document.getElementById('svgOne').appendChild(startArrow);
+      var COLUMNS = 7;
+      var roundSize = parseInt(bBox.width / COLUMNS);
 
-      var endArrow = createUseElement({
-        x: x + w - 10,
-        y: y + h / 2 - 10,
-        href: 'arrowRight',
-        fillId: 'myGradient',
-        scale: scale
-      });
-      document.getElementById('svgOne').appendChild(endArrow);
-
-      makeDraggable(rect, circleStart, circleEnd, startArrow, endArrow, {
-        scale: 1
-      });
-
-      y += h;
-      x += 10;
-    }
-
-    function createUseElement(options) {
-      //<use x="200" y="15" xlink:href="#myCircle" fill="url('#myGradient')" />
-      var xmlns = 'http://www.w3.org/2000/svg';
-      var xlinkns = 'http://www.w3.org/1999/xlink';
-      var use = document.createElementNS(xmlns, 'use');
-
-      var scale = options.scale || 1;
-      var angle = options.angle || 0;
-      var s =
-        'scale(' + scale + ') rotate(' + angle + ' ' + 0 + ' ' + 0 + ')';
-      use.setAttributeNS(null, 'transform', s);
-      use.setAttributeNS(null, 'class', 'hoverEffect');
-      use.setAttributeNS(null, 'id', 'arrowRight');
-
-      //use.setAttributeNS(null, 'transform-origin', '50% 50%');
-      //   var t =
-      //     'translate(' +
-      //     randomPos(width) +
-      //     ',' +
-      //     randomPos(height) +
-      //     ') ' +
-      //     'scale(' +
-      //     randomScaleNamed(name) +
-      //     ')';
-      //use.setAttributeNS(null, 'class', name);
-      use.setAttributeNS(null, 'x', options.x * (1 / scale));
-      use.setAttributeNS(null, 'y', options.y * (1 / scale));
-      use.setAttributeNS(xlinkns, 'xlink:href', '#' + options.href);
-      use.setAttributeNS(null, 'fill', `url('#${options.fillId}')`);
-      return use;
-    }
-
-    function makeDraggable(
-      middle,
-      start,
-      end,
-      arrowStart,
-      arrowEnd,
-      options
-    ) {
-      var scale = options.scale;
-      var middleRect = middle;
-      var startCircle = start;
-      var endCircle = end;
-      var svgRoot = document.getElementById('svgOne');
-      svgRoot.addEventListener('mouseup', endDrag);
-      svgRoot.addEventListener('mousemove', drag);
-
-      middleRect.addEventListener('mousedown', startDrag);
-      endCircle.addEventListener('mousedown', startDragEndArrow);
-      startCircle.addEventListener('mousedown', startDragStartArrow);
-      //middleRect.addEventListener('mousemove', drag);
-      //middleRect.addEventListener('mouseup', endDrag);
-      //middleRect.addEventListener('mouseleave', endDrag);
-
-      //startCircle.addEventListener('mousedown', startDragStartArrow);
-      //
-      //startCircle.addEventListener('mouseup', endDragStartArrow);
-      //startCircle.addEventListener('mouseleave', endDragStartArrow);
-
-      //endCircle.addEventListener('mousemove', dragEndArrow);
-
-      var startCircleSelected, initialStateDragStart;
-      var endCircleSelected, initialStateDragEnd;
-      var centerRect, offset;
-
-      function startDragStartArrow(evt) {
-        startCircleSelected = evt.target;
-        initialStateDragStart = getMousePosition(evt);
-        initialStateDragStart.w = middleRect.getAttributeNS(null, 'width');
-        initialStateDragStart.middleRectStartX = parseFloat(
-          middleRect.getAttributeNS(null, 'x')
-        );
-        initialStateDragStart.offsetX = initialStateDragStart.x;
-        initialStateDragStart.arrowOffsetX = initialStateDragStart.x;
-        initialStateDragStart.offsetX -= parseFloat(
-          startCircle.getAttributeNS(null, 'cx')
-        );
-        initialStateDragStart.y -= parseFloat(
-          startCircle.getAttributeNS(null, 'cy')
-        );
-        initialStateDragStart.arrowOffsetX -= arrowStart.getAttributeNS(
-          null,
-          'x'
-        );
+      for (var i = 0; i < COLUMNS + 1; i++) {
+        var l = createLine(i * roundSize, 0, i * roundSize, bBox.height);
+        document.getElementById('svgOne').appendChild(l);
       }
 
-      function startDragEndArrow(evt) {
-        endCircleSelected = evt.target;
-        initialStateDragEnd = getMousePosition(evt);
-        initialStateDragEnd.w = middleRect.getAttributeNS(null, 'width');
-        initialStateDragEnd.offsetX = initialStateDragEnd.x;
-        initialStateDragEnd.arrowOffsetX = initialStateDragEnd.x;
-        initialStateDragEnd.offsetX -= parseFloat(
-          endCircle.getAttributeNS(null, 'cx')
-        );
-        initialStateDragEnd.y -= parseFloat(
-          endCircle.getAttributeNS(null, 'cy')
-        );
-        initialStateDragEnd.arrowOffsetX -= arrowEnd.getAttributeNS(
-          null,
-          'x'
-        );
+      for (var i = 0; i < 10; i++) {
+        var rect = document.createElementNS(svgns, 'rect');
+        var color = '#' + Math.round(0xffffff * Math.random()).toString(16);
+        rect.setAttributeNS(null, 'x', x);
+        rect.setAttributeNS(null, 'y', y);
+        rect.setAttributeNS(null, 'height', h);
+        rect.setAttributeNS(null, 'width', w);
+        rect.setAttributeNS(null, 'fill', color);
+        document.getElementById('svgOne').appendChild(rect);
+
+        var circleStart = document.createElementNS(svgns, 'circle');
+        circleStart.setAttributeNS(null, 'cx', x);
+        circleStart.setAttributeNS(null, 'cy', y + h / 2);
+        circleStart.setAttributeNS(null, 'r', h / 2);
+        //circle.setAttributeNS(null, 'style', 'fill: none; stroke: blue; stroke-width: 1px;' );
+        circleStart.setAttributeNS(null, 'fill', color);
+        circleStart.setAttributeNS(null, 'class', 'hoverEffect');
+        document.getElementById('svgOne').appendChild(circleStart);
+
+        var circleEnd = document.createElementNS(svgns, 'circle');
+        circleEnd.setAttributeNS(null, 'cx', x + w);
+        circleEnd.setAttributeNS(null, 'cy', y + h / 2);
+        circleEnd.setAttributeNS(null, 'r', h / 2);
+        circleEnd.setAttributeNS(null, 'class', 'hoverEffect');
+        //circleEnd.setAttributeNS(null, 'style', 'fill: none; stroke: blue; stroke-width: 1px;' );
+        circleEnd.setAttributeNS(null, 'fill', color);
+
+        //circleStart.style.stroke = 'black';
+        circleStart.style.stroke.width = '3';
+        //circleEnd.style.stroke = 'black';
+        //circleEnd.style.stroke.width = '3';
+        document.getElementById('svgOne').appendChild(circleEnd);
+
+        var scale = 1;
+
+        var startArrow = createUseElement({
+          x: x - 10,
+          y: y + h / 2 - 10,
+          href: 'arrowLeft',
+          fillId: 'myGradient',
+          scale: scale
+        });
+        document.getElementById('svgOne').appendChild(startArrow);
+
+        var endArrow = createUseElement({
+          x: x + w - 10,
+          y: y + h / 2 - 10,
+          href: 'arrowRight',
+          fillId: 'myGradient',
+          scale: scale
+        });
+        document.getElementById('svgOne').appendChild(endArrow);
+
+        makeDraggable(rect, circleStart, circleEnd, startArrow, endArrow, {
+          scale: 1
+        });
+
+        y += h;
+        x += 10;
       }
 
-      function startDrag(evt) {
-        centerRect = evt.target;
-        offset = getMousePosition(evt);
-        offset.x -= parseFloat(centerRect.getAttributeNS(null, 'x'));
-        offset.y -= parseFloat(centerRect.getAttributeNS(null, 'y'));
+      function createLine(x1, y1, x2, y2, color, strokeWidth) {
+        var l = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        l.setAttribute('x1', x1);
+        l.setAttribute('y1', y1);
+        l.setAttribute('x2', x2);
+        l.setAttribute('y2', y2);
+        l.setAttribute('stroke', color || 'black');
+        l.setAttribute('stroke-width', strokeWidth || 2);
+        return l;
+      }
+      function createUseElement(options) {
+        //<use x="200" y="15" xlink:href="#myCircle" fill="url('#myGradient')" />
+        var xmlns = 'http://www.w3.org/2000/svg';
+        var xlinkns = 'http://www.w3.org/1999/xlink';
+        var use = document.createElementNS(xmlns, 'use');
+
+        var scale = options.scale || 1;
+        var angle = options.angle || 0;
+        var s =
+          'scale(' + scale + ') rotate(' + angle + ' ' + 0 + ' ' + 0 + ')';
+        use.setAttributeNS(null, 'transform', s);
+        use.setAttributeNS(null, 'class', 'hoverEffect');
+        use.setAttributeNS(null, 'id', 'arrowRight');
+
+        //use.setAttributeNS(null, 'transform-origin', '50% 50%');
+        //   var t =
+        //     'translate(' +
+        //     randomPos(width) +
+        //     ',' +
+        //     randomPos(height) +
+        //     ') ' +
+        //     'scale(' +
+        //     randomScaleNamed(name) +
+        //     ')';
+        //use.setAttributeNS(null, 'class', name);
+        use.setAttributeNS(null, 'x', options.x * (1 / scale));
+        use.setAttributeNS(null, 'y', options.y * (1 / scale));
+        use.setAttributeNS(xlinkns, 'xlink:href', '#' + options.href);
+        use.setAttributeNS(null, 'fill', `url('#${options.fillId}')`);
+        return use;
       }
 
-      //https://www.sitepoint.com/how-to-translate-from-dom-to-svg-coordinates-and-back-again/
-      //clientX and clientY are dome coordinate system in pixels
-      function getMousePosition(evt) {
-        var CTM = svgRoot.getScreenCTM();
-        return {
-          x: (evt.clientX - CTM.e) / CTM.a,
-          y: (evt.clientY - CTM.f) / CTM.d
-        };
-      }
+      function makeDraggable(
+        middle,
+        start,
+        end,
+        arrowStart,
+        arrowEnd,
+        options
+      ) {
+        var scale = options.scale;
+        var middleRect = middle;
+        var startCircle = start;
+        var endCircle = end;
+        var svgRoot = document.getElementById('svgOne');
+        svgRoot.addEventListener('mouseup', endDrag);
+        svgRoot.addEventListener('mousemove', drag);
 
-      function drag(evt) {
-        var coord = getMousePosition(evt);
-        handleDrag(coord);
-      }
+        middleRect.addEventListener('mousedown', startDrag);
+        endCircle.addEventListener('mousedown', startDragEndArrow);
+        startCircle.addEventListener('mousedown', startDragStartArrow);
+        //middleRect.addEventListener('mousemove', drag);
+        //middleRect.addEventListener('mouseup', endDrag);
+        //middleRect.addEventListener('mouseleave', endDrag);
 
-      function handleDrag(coord) {
-        if (startCircleSelected) {
-          //evt.preventDefault();
+        //startCircle.addEventListener('mousedown', startDragStartArrow);
+        //
+        //startCircle.addEventListener('mouseup', endDragStartArrow);
+        //startCircle.addEventListener('mouseleave', endDragStartArrow);
 
-          var dt = parseFloat(initialStateDragStart.x) - parseFloat(coord.x);
+        //endCircle.addEventListener('mousemove', dragEndArrow);
 
-          middleRect.setAttributeNS(
-            null,
-            'width',
-            parseFloat(initialStateDragStart.w) + parseFloat(dt)
-          );
-          console.log(
-            'middleRectStartX: ' + initialStateDragStart.middleRectStartX
-          );
-          middleRect.setAttributeNS(
-            null,
-            'x',
-            initialStateDragStart.middleRectStartX - dt
-          );
+        var startCircleSelected, initialStateDragStart;
+        var endCircleSelected, initialStateDragEnd;
+        var centerRect, offset;
 
-          startCircle.setAttributeNS(
-            null,
-            'cx',
-            coord.x - initialStateDragStart.offsetX
+        function startDragStartArrow(evt) {
+          startCircleSelected = evt.target;
+          initialStateDragStart = getMousePosition(evt);
+          initialStateDragStart.w = middleRect.getAttributeNS(null, 'width');
+          initialStateDragStart.middleRectStartX = parseFloat(
+            middleRect.getAttributeNS(null, 'x')
           );
-
-          var xEndArrowBefore = parseFloat(
-            arrowStart.getAttributeNS(null, 'x')
-          );
-
-          arrowStart.setAttributeNS(
-            null,
-            'x',
-            coord.x - initialStateDragStart.arrowOffsetX
-          );
-        }
-        if (endCircleSelected) {
-          //evt.preventDefault();
-          var dt = parseFloat(coord.x) - parseFloat(initialStateDragEnd.x);
-          middleRect.setAttributeNS(
-            null,
-            'width',
-            parseFloat(initialStateDragEnd.w) + parseFloat(dt)
-          );
-
-          endCircle.setAttributeNS(
-            null,
-            'cx',
-            coord.x - initialStateDragEnd.offsetX
-          );
-
-          var xEndArrowBefore = parseFloat(
-            arrowEnd.getAttributeNS(null, 'x')
-          );
-          arrowEnd.setAttributeNS(
-            null,
-            'x',
-            coord.x - initialStateDragEnd.arrowOffsetX
-          );
-        }
-        if (centerRect) {
-          //evt.preventDefault();
-          var xBefore = parseFloat(centerRect.getAttributeNS(null, 'x'));
-          centerRect.setAttributeNS(null, 'x', coord.x - offset.x);
-          var xAfter = parseFloat(centerRect.getAttributeNS(null, 'x'));
-          var xStartCircle = parseFloat(
+          initialStateDragStart.offsetX = initialStateDragStart.x;
+          initialStateDragStart.arrowOffsetX = initialStateDragStart.x;
+          initialStateDragStart.offsetX -= parseFloat(
             startCircle.getAttributeNS(null, 'cx')
           );
-          var dt = xAfter - xBefore;
-          startCircle.setAttributeNS(null, 'cx', xStartCircle + dt);
-
-          var xEndCircle = parseFloat(endCircle.getAttributeNS(null, 'cx'));
-          endCircle.setAttributeNS(null, 'cx', xEndCircle + dt);
-
-          var xStartArrow = parseFloat(arrowStart.getAttributeNS(null, 'x'));
-          arrowStart.setAttributeNS(
-            null,
-            'x',
-            xStartArrow + (dt * 1) / scale
+          initialStateDragStart.y -= parseFloat(
+            startCircle.getAttributeNS(null, 'cy')
           );
+          initialStateDragStart.arrowOffsetX -= arrowStart.getAttributeNS(
+            null,
+            'x'
+          );
+        }
 
-          var xEndArrow = parseFloat(arrowEnd.getAttributeNS(null, 'x'));
-          arrowEnd.setAttributeNS(null, 'x', xEndArrow + (dt * 1) / scale);
+        function startDragEndArrow(evt) {
+          endCircleSelected = evt.target;
+          initialStateDragEnd = getMousePosition(evt);
+          initialStateDragEnd.w = middleRect.getAttributeNS(null, 'width');
+          initialStateDragEnd.offsetX = initialStateDragEnd.x;
+          initialStateDragEnd.arrowOffsetX = initialStateDragEnd.x;
+          initialStateDragEnd.offsetX -= parseFloat(
+            endCircle.getAttributeNS(null, 'cx')
+          );
+          initialStateDragEnd.y -= parseFloat(
+            endCircle.getAttributeNS(null, 'cy')
+          );
+          initialStateDragEnd.arrowOffsetX -= arrowEnd.getAttributeNS(
+            null,
+            'x'
+          );
+        }
 
-          //selectedElement.setAttributeNS(null, "y", coord.y - offset.y);
+        function startDrag(evt) {
+          centerRect = evt.target;
+          offset = getMousePosition(evt);
+          offset.s = offset.x; //parseFloat(middleRect.getAttributeNS(null, 'x'));
+          console.log('start Drag', offset.s);
+          offset.x -= parseFloat(centerRect.getAttributeNS(null, 'x'));
+          offset.y -= parseFloat(centerRect.getAttributeNS(null, 'y'));
+        }
+
+        //https://www.sitepoint.com/how-to-translate-from-dom-to-svg-coordinates-and-back-again/
+        //clientX and clientY are dome coordinate system in pixels
+        function getMousePosition(evt) {
+          var CTM = svgRoot.getScreenCTM();
+          return {
+            x: (evt.clientX - CTM.e) / CTM.a,
+            y: (evt.clientY - CTM.f) / CTM.d
+          };
+        }
+
+        function drag(evt) {
+          var coord = getMousePosition(evt);
+          handleDrag(coord);
+        }
+
+        function handleDrag(coord, final) {
+          if (startCircleSelected) {
+            //evt.preventDefault();
+
+            var dt = parseFloat(initialStateDragStart.x) - parseFloat(coord.x);
+
+            middleRect.setAttributeNS(
+              null,
+              'width',
+              parseFloat(initialStateDragStart.w) + parseFloat(dt)
+            );
+            console.log(
+              'middleRectStartX: ' + initialStateDragStart.middleRectStartX
+            );
+            middleRect.setAttributeNS(
+              null,
+              'x',
+              initialStateDragStart.middleRectStartX - dt
+            );
+
+            startCircle.setAttributeNS(
+              null,
+              'cx',
+              coord.x - initialStateDragStart.offsetX
+            );
+
+            var xEndArrowBefore = parseFloat(
+              arrowStart.getAttributeNS(null, 'x')
+            );
+
+            arrowStart.setAttributeNS(
+              null,
+              'x',
+              coord.x - initialStateDragStart.arrowOffsetX
+            );
+          }
+          if (endCircleSelected) {
+            //evt.preventDefault();
+            var dt = parseFloat(coord.x) - parseFloat(initialStateDragEnd.x);
+            middleRect.setAttributeNS(
+              null,
+              'width',
+              parseFloat(initialStateDragEnd.w) + parseFloat(dt)
+            );
+
+            endCircle.setAttributeNS(
+              null,
+              'cx',
+              coord.x - initialStateDragEnd.offsetX
+            );
+
+            var xEndArrowBefore = parseFloat(
+              arrowEnd.getAttributeNS(null, 'x')
+            );
+            arrowEnd.setAttributeNS(
+              null,
+              'x',
+              coord.x - initialStateDragEnd.arrowOffsetX
+            );
+          }
+          if (centerRect) {
+            //evt.preventDefault();
+            var xBefore = parseFloat(centerRect.getAttributeNS(null, 'x'));
+            console.log('handle drag: coord.x: ' + coord.x);
+            var dtDrag = parseInt(coord.x) - xBefore - offset.x; //parseInt(offset.s);
+            if (final) {
+              var current = parseFloat(startCircle.getAttributeNS(null, 'cx'));
+              dtDrag = coord.x - current + h / 2;
+              console.log('current: ' + current);
+              console.log('dtDrag: ' + dtDrag);
+            }
+
+            //console.log('offset.s: ' + offset.s);
+
+            //centerRect.setAttributeNS(null, 'x', coord.x - offset.x);
+            // console.log('xBefore: ' + xBefore);
+            // let sum = Number(xBefore) + Number(dtDrag);
+            // console.log('sum: ', sum);
+            if (final) {
+              centerRect.setAttributeNS(null, 'x', xBefore + dtDrag);
+            } else {
+              centerRect.setAttributeNS(null, 'x', xBefore + dtDrag);
+            }
+
+            var xAfter = parseFloat(centerRect.getAttributeNS(null, 'x'));
+
+            var dt = xAfter - xBefore;
+
+            var xStartCircle = parseFloat(
+              startCircle.getAttributeNS(null, 'cx')
+            );
+            startCircle.setAttributeNS(null, 'cx', xStartCircle + dt);
+
+            var xEndCircle = parseFloat(endCircle.getAttributeNS(null, 'cx'));
+            endCircle.setAttributeNS(null, 'cx', xEndCircle + dt);
+
+            var xStartArrow = parseFloat(arrowStart.getAttributeNS(null, 'x'));
+            arrowStart.setAttributeNS(null, 'x', xStartArrow + dt);
+
+            var xEndArrow = parseFloat(arrowEnd.getAttributeNS(null, 'x'));
+            arrowEnd.setAttributeNS(null, 'x', xEndArrow + dt);
+
+            //selectedElement.setAttributeNS(null, "y", coord.y - offset.y);
+          }
+        }
+
+        function round(x) {
+          //console.log('x: ' + x);
+          //console.log('x round: ' + (x - (x % roundSize)));
+          return x - parseInt(x % roundSize);
+        }
+
+        function endDrag(evt) {
+          //console.log('endDrag');
+
+          if (centerRect) {
+            var x = parseFloat(centerRect.getAttributeNS(null, 'x'));
+            x = round(x);
+            var coord = {
+              x: x
+            };
+            handleDrag(coord, true);
+          }
+          centerRect = null;
+          endCircleSelected = null;
+          startCircleSelected = null;
         }
       }
-
-      function round(x) {
-        console.log("x: " + x)
-        console.log("x round: " + (x - x % roundSize))
-        return (20 + x - x % roundSize)
-      }
-
-      function endDrag(evt) {
-        var coord = getMousePosition(evt);
-        coord.x = round(coord.x);
-        handleDrag(coord);
-        centerRect = null;
-        endCircleSelected = null;
-        startCircleSelected = null;
-      }
-    }
-  </script>
-</body>
-
+    </script>
+  </body>
 </html>
