@@ -46,17 +46,33 @@
       var y = 0;
       var h = 40;
       var w = 150;
-
-      var bBox = document.getElementById('svgOne').getBBox();
+      var DrawGrid = true;
+      var ROOT = document.getElementById('svgOne');
+      var bBox = ROOT.getBBox();
       console.log('XxY', bBox.x + 'x' + bBox.y);
       console.log('size', bBox.width + 'x' + bBox.height);
 
-      var COLUMNS = 7;
+      var COLUMNS = 30;
       var roundSize = parseInt(bBox.width / COLUMNS);
+      var debugText = null;
+      var DEBUG = true;
+      if (DEBUG) {
+        debugText = document.createElementNS(
+          'http://www.w3.org/2000/svg',
+          'text'
+        );
+        debugText.setAttribute('x', bBox.width - 150);
+        debugText.setAttribute('y', 50);
+        debugText.setAttribute('fill', '#fff');
+        debugText.textContent = '--x--';
+        ROOT.appendChild(debugText);
+      }
 
-      for (var i = 0; i < COLUMNS + 1; i++) {
-        var l = createLine(i * roundSize, 0, i * roundSize, bBox.height);
-        document.getElementById('svgOne').appendChild(l);
+      if (DrawGrid) {
+        for (var i = 0; i < COLUMNS + 1; i++) {
+          var l = createLine(i * roundSize, 0, i * roundSize, bBox.height);
+          document.getElementById('svgOne').appendChild(l);
+        }
       }
 
       for (var i = 0; i < 10; i++) {
@@ -256,6 +272,7 @@
 
         function drag(evt) {
           var coord = getMousePosition(evt);
+          debugText.textContent = coord.x + 'x' + coord.y;
           handleDrag(coord);
         }
 
@@ -297,7 +314,7 @@
           }
           if (endCircleSelected) {
             //evt.preventDefault();
-            console.log('end drag: ' + coord.x);
+            console.log('handle drag end: coord.x: ' + coord.x);
             var dt = parseFloat(coord.x) - parseFloat(initialStateDragEnd.x);
             middleRect.setAttributeNS(
               null,
@@ -319,11 +336,14 @@
               'x',
               coord.x - initialStateDragEnd.arrowOffsetX
             );
+            console.log(
+              'circle -> : ' + parseFloat(circleEnd.getAttributeNS(null, 'cx'))
+            );
           }
           if (centerRect) {
             //evt.preventDefault();
             var xBefore = parseFloat(centerRect.getAttributeNS(null, 'x'));
-            console.log('handle drag: coord.x: ' + coord.x);
+            console.log('handle drag center: coord.x: ' + coord.x);
             var dtDrag = parseInt(coord.x) - xBefore - offset.x; //parseInt(offset.s);
             if (final) {
               var current = parseFloat(startCircle.getAttributeNS(null, 'cx'));
@@ -381,6 +401,7 @@
           //console.log('endDrag');
 
           if (centerRect) {
+            console.log('centerRect');
             var x = parseFloat(centerRect.getAttributeNS(null, 'x'));
             x = round(x);
             var coord = {
@@ -389,7 +410,8 @@
             handleDrag(coord, true);
           }
           if (endCircleSelected) {
-            var cx = parseFloat(circleEnd.getAttributeNS(null, 'cx'));
+            console.log('endCircleSelected');
+            var cx = parseFloat(endCircleSelected.getAttributeNS(null, 'cx'));
             console.log('before round: ' + cx);
             cx = roundUp(cx);
             console.log('after round: ' + cx);
@@ -399,7 +421,10 @@
             handleDrag(coord, true);
           }
           if (startCircleSelected) {
-            var ccx = parseFloat(circleStart.getAttributeNS(null, 'cx'));
+            console.log('startCircleSelected');
+            var ccx = parseFloat(
+              startCircleSelected.getAttributeNS(null, 'cx')
+            );
             ccx = round(ccx);
             var coord = {
               x: ccx + h / 2
