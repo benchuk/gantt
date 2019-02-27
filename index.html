@@ -297,6 +297,7 @@
           }
           if (endCircleSelected) {
             //evt.preventDefault();
+            console.log('end drag: ' + coord.x);
             var dt = parseFloat(coord.x) - parseFloat(initialStateDragEnd.x);
             middleRect.setAttributeNS(
               null,
@@ -370,6 +371,11 @@
           //console.log('x round: ' + (x - (x % roundSize)));
           return x - parseInt(x % roundSize);
         }
+        function roundUp(px) {
+          //console.log('x: ' + x);
+          //console.log('x round: ' + (x - (x % roundSize)));
+          return px - parseInt(px % roundSize) + roundSize;
+        }
 
         function endDrag(evt) {
           //console.log('endDrag');
@@ -379,6 +385,24 @@
             x = round(x);
             var coord = {
               x: x
+            };
+            handleDrag(coord, true);
+          }
+          if (endCircleSelected) {
+            var cx = parseFloat(circleEnd.getAttributeNS(null, 'cx'));
+            console.log('before round: ' + cx);
+            cx = roundUp(cx);
+            console.log('after round: ' + cx);
+            var coord = {
+              x: cx - h / 2
+            };
+            handleDrag(coord, true);
+          }
+          if (startCircleSelected) {
+            var ccx = parseFloat(circleStart.getAttributeNS(null, 'cx'));
+            ccx = round(ccx);
+            var coord = {
+              x: ccx + h / 2
             };
             handleDrag(coord, true);
           }
