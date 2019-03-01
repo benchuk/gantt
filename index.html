@@ -248,30 +248,13 @@
         scale: scale
       });
       container.appendChild(endArrow);
-
-      return makeDraggable(
-        container,
-        rect,
-        circleStart,
-        circleEnd,
-        startArrow,
-        endArrow,
-        h, {
-          scale: 1
-        }
-      );
+      var options = {
+        scale: 1
+      }
+      return makeDraggable(container, rect, circleStart, circleEnd, startArrow, endArrow, h, options);
     }
 
-    function makeDraggable(
-      container,
-      middle,
-      start,
-      end,
-      arrowStart,
-      arrowEnd,
-      h,
-      options
-    ) {
+    function makeDraggable(container, middle, start, end, arrowStart, arrowEnd, h, options) {
       var scale = options.scale;
       var middleRect = middle;
       var startCircle = start;
@@ -283,16 +266,6 @@
       middleRect.addEventListener('mousedown', startDrag);
       arrowStart.addEventListener('mousedown', startDragStartArrow);
       arrowEnd.addEventListener('mousedown', startDragEndArrow);
-      //middleRect.addEventListener('mousemove', drag);
-      //middleRect.addEventListener('mouseup', endDrag);
-      //middleRect.addEventListener('mouseleave', endDrag);
-
-      //startCircle.addEventListener('mousedown', startDragStartArrow);
-      //
-      //startCircle.addEventListener('mouseup', endDragStartArrow);
-      //startCircle.addEventListener('mouseleave', endDragStartArrow);
-
-      //endCircle.addEventListener('mousemove', dragEndArrow);
 
       var startCircleSelected, initialStateDragStart;
       var endCircleSelected, initialStateDragEnd;
@@ -314,10 +287,7 @@
         initialStateDragStart.y -= parseFloat(
           startCircle.getAttributeNS(null, 'cy')
         );
-        initialStateDragStart.arrowOffsetX -= arrowStart.getAttributeNS(
-          null,
-          'x'
-        );
+        initialStateDragStart.arrowOffsetX -= arrowStart.getAttributeNS(null, 'x');
       }
 
       function startDragEndArrow(evt) {
@@ -330,13 +300,8 @@
         initialStateDragEnd.offsetX -= parseFloat(
           endCircle.getAttributeNS(null, 'cx')
         );
-        initialStateDragEnd.y -= parseFloat(
-          endCircle.getAttributeNS(null, 'cy')
-        );
-        initialStateDragEnd.arrowOffsetX -= arrowEnd.getAttributeNS(
-          null,
-          'x'
-        );
+        initialStateDragEnd.y -= parseFloat(endCircle.getAttributeNS(null, 'cy'));
+        initialStateDragEnd.arrowOffsetX -= arrowEnd.getAttributeNS(null, 'x');
       }
 
       function startDrag(evt) {
@@ -368,15 +333,12 @@
 
       function handleDrag(coord, dt, snap, extern) {
         if (startCircleSelected) {
-          //evt.preventDefault();
           var xEndArrowBefore = parseFloat(arrowStart.getAttributeNS(null, 'x'));
           if (!snap) {
             var dt = parseFloat(initialStateDragStart.x) - parseFloat(coord.x);
             middleRect.setAttributeNS(null, 'width', parseFloat(initialStateDragStart.w) + parseFloat(dt));
             middleRect.setAttributeNS(null, 'x', initialStateDragStart.middleRectStartX - dt);
-
             startCircle.setAttributeNS(null, 'cx', coord.x - initialStateDragStart.offsetX);
-
             arrowStart.setAttributeNS(null, 'x', coord.x - initialStateDragStart.arrowOffsetX);
           } else {
             var startX = parseFloat(startCircle.getAttributeNS(null, 'cx')) - h / 2;
@@ -392,21 +354,14 @@
           }
         }
         if (endCircleSelected) {
-          //evt.preventDefault();
           //console.log('handle drag end: coord.x: ' + coord.x);
           var dtLocal = parseFloat(coord.x) - parseFloat(initialStateDragEnd.x);
           middleRect.setAttributeNS(null, 'width', parseFloat(initialStateDragEnd.w) + parseFloat(dtLocal));
-
           endCircle.setAttributeNS(null, 'cx', coord.x - initialStateDragEnd.offsetX);
-
           var xEndArrowBefore = parseFloat(arrowEnd.getAttributeNS(null, 'x'));
           arrowEnd.setAttributeNS(null, 'x', coord.x - initialStateDragEnd.arrowOffsetX);
-          // console.log(
-          //   'circle -> : ' + parseFloat(circleEnd.getAttributeNS(null, 'cx'))
-          // );
         }
         if (centerRect || extern) {
-          //evt.preventDefault();
           if (!offset) {
             offset = {
               x: 0,
@@ -414,7 +369,6 @@
             };
           }
           var xBefore = parseFloat(middleRect.getAttributeNS(null, 'x'));
-          //console.log('handle drag center: coord.x: ' + coord.x);
           var dtDrag = dt; //parseInt(coord.x) - offset.s; //parseInt(coord.x) - xBefore - offset.x; //parseInt(offset.s);
           if (snap) {
             var current = xBefore - (h / 2) //parseFloat(startCircle.getAttributeNS(null, 'cx'));
@@ -423,14 +377,11 @@
           }
           middleRect.setAttributeNS(null, 'x', xBefore + dtDrag);
           // if (snap) {
-
           // } else {
           //   middleRect.setAttributeNS(null, 'x', xBefore + dtDrag);
           // }
-
           var xAfter = parseFloat(middleRect.getAttributeNS(null, 'x'));
           var dt = xAfter - xBefore;
-
           var xStartCircle = parseFloat(startCircle.getAttributeNS(null, 'cx'));
           startCircle.setAttributeNS(null, 'cx', xStartCircle + dt);
 
@@ -461,7 +412,6 @@
       function endDrag(evt) {
         //console.log('endDrag');
         evt.stopPropagation();
-
         if (centerRect) {
           //console.log('centerRect');
           var x = parseFloat(centerRect.getAttributeNS(null, 'x'));
@@ -484,9 +434,7 @@
         }
         if (startCircleSelected) {
           console.log('startCircleSelected');
-          var ccx = parseFloat(
-            startCircleSelected.getAttributeNS(null, 'cx')
-          );
+          var ccx = parseFloat(startCircleSelected.getAttributeNS(null, 'cx'));
           ccx = round(ccx);
           var coord = {
             x: ccx + h / 2
