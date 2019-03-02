@@ -8,26 +8,50 @@
       stroke: black;
       opacity: 1;
     }
+
+    .glower:hover {
+      filter: url(#sofGlow);
+    }
   </style>
 </head>
 
 <body>
   <svg id="svgOne" xmlns="http://www.w3.org/2000/svg" width="900" height="600" viewBox="0 0 900 600">
     <defs>
+      <filter id="sofGlow" height="300%" width="300%" x="-75%" y="-75%">
+        <!-- Thicken out the original shape -->
+        <feMorphology operator="dilate" radius="4" in="SourceAlpha" result="thicken" />
+
+        <!-- Use a gaussian blur to create the soft blurriness of the glow -->
+        <feGaussianBlur in="thicken" stdDeviation="10" result="blurred" />
+
+        <!-- Change the colour -->
+        <feFlood flood-color="rgb(0,186,255)" result="glowColor" />
+
+        <!-- Color in the glows -->
+        <feComposite in="glowColor" in2="blurred" operator="in" result="softGlow_colored" />
+
+        <!--	Layer the effects together -->
+        <feMerge>
+          <feMergeNode in="softGlow_colored" />
+          <feMergeNode in="SourceGraphic" />
+        </feMerge>
+
+      </filter>
       <circle id="myCircle" cx="0" cy="0" r="15" />
       <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z" />
 
       <g id="arrowRight" transform="scale(0.05) translate(0,-40)" fill="grey">
-        <circle style="fill:rgb(15, 15, 15);" cx="236.827" cy="236.827" r="236.827" />
-        <path style="fill:#FFFFFF;" d="M333.577,219.408c-35.885-35.885-71.77-71.766-107.659-107.651
+        <circle style="fill:rgb(15, 15, 15,0.3);" cx="236.827" cy="236.827" r="236.827" />
+        <path style="fill:#FFFFFFAA;" d="M333.577,219.408c-35.885-35.885-71.77-71.766-107.659-107.651
         	c-25.564-25.56-65.084,14.259-39.456,39.883c29.236,29.236,58.479,58.476,87.719,87.712c-29.315,29.307-58.625,58.618-87.929,87.925
         	c-25.564,25.56,14.255,65.08,39.879,39.456c35.889-35.885,71.774-71.77,107.659-107.655
         	C344.635,248.237,344.34,230.171,333.577,219.408z" />
       </g>
 
       <g id="arrowLeft" transform="scale(0.05) translate(0,-40)" fill="grey">
-        <circle style="fill:rgb(15, 15, 15);" cx="236.827" cy="236.827" r="236.827" />
-        <path style="fill:#FFFFFF;" <path style="fill:#FFFFFF;" d="M214.181,240.332c29.429-29.425,58.857-58.853,88.278-88.278
+        <circle style="fill:rgb(15, 15, 15,0.3);" cx="236.827" cy="236.827" r="236.827" />
+        <path style="fill:#FFFFFFAA;" <path style="fill:#FFFFFFAA;" d="M214.181,240.332c29.429-29.425,58.857-58.853,88.278-88.278
 	c25.666-25.663-14.316-65.341-40.039-39.615c-36.029,36.029-72.055,72.055-108.084,108.084
 	c-10.888,10.885-10.588,29.023,0.214,39.829c36.029,36.029,72.055,72.058,108.084,108.087
 	c25.666,25.666,65.345-14.316,39.615-40.043C272.888,299.039,243.535,269.686,214.181,240.332z" />
@@ -102,7 +126,7 @@
       l.setAttribute('x2', x2);
       l.setAttribute('y2', y2);
       l.setAttribute('stroke', color || 'black');
-      l.setAttribute('stroke-width', strokeWidth || 2);
+      l.setAttribute('stroke-width', strokeWidth || 0.5);
       return l;
     }
 
@@ -204,6 +228,8 @@
       rect.setAttributeNS(null, 'height', h);
       rect.setAttributeNS(null, 'width', w);
       rect.setAttributeNS(null, 'fill', color);
+      //rect.setAttributeNS(null, 'filter', "url(#sofGlow)");
+      rect.setAttributeNS(null, 'class', "glower");
       container.appendChild(rect);
 
       var circleStart = document.createElementNS(svgns, 'circle');
@@ -259,7 +285,7 @@
       var middleRect = middle;
       var startCircle = start;
       var endCircle = end;
-      var svgRoot = document.getElementById('svgOne');
+      //var svgRoot = document.getElementById('svgOne');
       container.addEventListener('mouseup', endDrag);
       container.addEventListener('mousemove', drag);
 
