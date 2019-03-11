@@ -23,7 +23,7 @@ const requestHandler = (request, response) => {
     try {
         fs.readFile(request.url.replace('/', "./"), function (err, js) {
             if (err) {
-                console.log(err)
+                //console.log(err)
                 response.write("not found");
                 response.end();
                 return;
