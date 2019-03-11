@@ -8,7 +8,7 @@ const requestHandler = (request, response) => {
     console.log(request.url)
     if (request.url === "/") {
         console.log('handle index')
-        fs.readFile('./index2.html', function (err, html) {
+        fs.readFile('./index.html', function (err, html) {
 
             response.writeHeader(200, {
                 "Content-Type": "text/html"
