@@ -195,7 +195,7 @@
         }
         console.log('stopDragAll');
         dragAll = false;
-        var coord = getMousePosition(evt);
+        var coord = getMousePosition(evt, ROOT);
         var x = coord.x;
         x = round2(x);
         var coord = {
@@ -210,7 +210,7 @@
 
       function startDragAll(evt) {
         console.log('startDragAll');
-        offsetAll.s = getMousePosition(evt).x;
+        offsetAll.s = getMousePosition(evt, ROOT).x;
         dragAll = true;
       }
 
@@ -218,9 +218,9 @@
         if (dragAll) {
           console.log('drag all');
           console.log(evt);
-          var currentX = getMousePosition(evt).x;
+          var currentX = getMousePosition(evt, ROOT).x;
           var allDt = currentX - offsetAll.s;
-          var coord = getMousePosition(evt);
+          var coord = getMousePosition(evt, ROOT);
           for (var i = 0; i < elementsDragger.length; i++) {
             elementsDragger[i](coord, allDt, false, true);
           }
