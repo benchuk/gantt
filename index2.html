@@ -264,7 +264,7 @@
             function startDragStartArrow(evt) {
               evt.stopPropagation();
               startCircleSelected = startCircle; //evt.target;
-              initialStateDragStart = this.getMousePosition(evt);
+              initialStateDragStart = getMousePosition(evt);
               initialStateDragStart.w = middleRect.getAttributeNS(
                 null,
                 'width'
