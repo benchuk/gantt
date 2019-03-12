@@ -1,0 +1,47 @@
+{
+    "env": {
+        "browser": true,
+        "node": true
+    },
+    "extends": ["airbnb"],
+    "rules": {
+        "no-underscore-dangle": "off",
+        "no-param-reassign": "warn",
+        "import/prefer-default-export": "off",
+        "semi": ["error", "never"],
+        "linebreak-style": 0,
+        "comma-dangle": ["error", "never"],
+        "no-console": "off",
+        "arrow-body-style": ["error", "always"],
+        "func-names": ["error", "never"],
+        "object-curly-newline": ["error", {
+            "ObjectExpression": "always",
+            "ObjectPattern": {
+                "multiline": true
+            },
+            "ImportDeclaration": "never",
+            "ExportDeclaration": "never"
+        }],
+        "object-curly-spacing": ["error", "always"],
+        "indent": ["error", 4, {
+            "SwitchCase": 1,
+            "VariableDeclarator": "first",
+            "MemberExpression": 1,
+            "FunctionDeclaration": {
+                "parameters": "first"
+            },
+            "FunctionExpression": {
+                "parameters": "first"
+            },
+            "CallExpression": {
+                "arguments": "first"
+            },
+            "ArrayExpression": "first",
+            "ObjectExpression": "first",
+            "ImportDeclaration": "first",
+            "flatTernaryExpressions": true
+        }],
+        "consistent-return": "warn",
+        "space-before-blocks": "error"
+    }
+}

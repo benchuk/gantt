@@ -1,0 +1,20 @@
+{
+    "editor.renderWhitespace": "all",
+    "window.zoomLevel": 0,
+    "vsicons.presets.hideExplorerArrows": true,
+    "terminal.integrated.fontSize": 14,
+    "editor.formatOnPaste": false,
+    "javascript.format.enable": false,
+    "git.ignoreLimitWarning": true,
+    "prettier.eslintIntegration": true,
+    "eslint.autoFixOnSave": true,
+    "editor.formatOnSave": false,
+    "files.associations": {
+        "*.env": "bat"
+    },
+    "cSpell.words": [],
+    "search.showLineNumbers": true,
+    "search.smartCase": true,
+    "debug.inlineValues": true,
+    "breadcrumbs.enabled": true
+}
