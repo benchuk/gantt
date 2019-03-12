@@ -1,5 +1,6 @@
 function GanttItemsFactory() {
 
+
     var xmlns = 'http://www.w3.org/2000/svg';
     var xlinkns = 'http://www.w3.org/1999/xlink';
 
@@ -70,7 +71,32 @@ function GanttItemsFactory() {
         return use;
     };
 
-    this.createTask = function (options) {
+    this.createText = function (options, ROOT) {
+        if (!options) {
+            options = {}
+        }
+
+        var text = document.createElementNS(xmlns, 'text');
+
+        text.setAttribute('fill', options.color || '#000');
+        text.textContent = options.text || "";
+        ROOT.appendChild(text);
+
+        var textRenderBox = text.getBBox();
+        var textWidth = textRenderBox.width;
+        var textHeight = textRenderBox.height;
+        var x = (options.maxWidth - textWidth) / 2
+        text.setAttribute('x', options.x + x);
+        //TBD: handle cases where h is smaller than textHeight
+        //TBD: fix this calculation
+        var currentY = options.y + ((options.h - textHeight) / 2);
+        console.log("currentY: " + currentY)
+        text.setAttribute('y', currentY + 15);
+        ROOT.removeChild(text);
+        return text;
+    }
+
+    this.createTask = function (options, ROOT) {
         if (!options) {
             options = {}
         }
@@ -86,6 +112,7 @@ function GanttItemsFactory() {
         if (!options.w) {
             options.w = 100
         }
+
         //x, y, h, w, color
         var rect = document.createElementNS(xmlns, 'rect');
         //var color = '#' + Math.round(0xffffff * Math.random()).toString(16);
@@ -141,16 +168,16 @@ function GanttItemsFactory() {
             scale: scale
         });
 
-        function makeDraggable(
-            container,
-            middle,
-            start,
-            end,
-            arrowStart,
-            arrowEnd,
-            h,
-            options
-        ) {
+        var textEle = this.createText({
+            x: options.x,
+            maxWidth: options.w,
+            h: options.h,
+            y: options.y,
+            color: 'black',
+            text: "task1"
+        }, ROOT)
+
+        function makeDraggable(container, middle, start, end, arrowStart, arrowEnd, text, h, options) {
             var scale = options ? options.scale || 1 : 1;
             var middleRect = middle;
             var startCircle = start;
@@ -171,25 +198,13 @@ function GanttItemsFactory() {
                 evt.stopPropagation();
                 startCircleSelected = startCircle; //evt.target;
                 initialStateDragStart = getMousePosition(evt, container);
-                initialStateDragStart.w = middleRect.getAttributeNS(
-                    null,
-                    'width'
-                );
-                initialStateDragStart.middleRectStartX = parseFloat(
-                    middleRect.getAttributeNS(null, 'x')
-                );
+                initialStateDragStart.w = middleRect.getAttributeNS(null, 'width');
+                initialStateDragStart.middleRectStartX = parseFloat(middleRect.getAttributeNS(null, 'x'));
                 initialStateDragStart.offsetX = initialStateDragStart.x;
                 initialStateDragStart.arrowOffsetX = initialStateDragStart.x;
-                initialStateDragStart.offsetX -= parseFloat(
-                    startCircle.getAttributeNS(null, 'cx')
-                );
-                initialStateDragStart.y -= parseFloat(
-                    startCircle.getAttributeNS(null, 'cy')
-                );
-                initialStateDragStart.arrowOffsetX -= arrowStart.getAttributeNS(
-                    null,
-                    'x'
-                );
+                initialStateDragStart.offsetX -= parseFloat(startCircle.getAttributeNS(null, 'cx'));
+                initialStateDragStart.y -= parseFloat(startCircle.getAttributeNS(null, 'cy'));
+                initialStateDragStart.arrowOffsetX -= arrowStart.getAttributeNS(null, 'x');
             }
 
             function startDragEndArrow(evt) {
@@ -240,90 +255,41 @@ function GanttItemsFactory() {
 
             function handleDrag(coord, dt, snap, extern) {
                 if (startCircleSelected) {
-                    var xEndArrowBefore = parseFloat(
-                        arrowStart.getAttributeNS(null, 'x')
-                    );
+                    var xEndArrowBefore = parseFloat(arrowStart.getAttributeNS(null, 'x'));
                     if (!snap) {
-                        var dt =
-                            parseFloat(initialStateDragStart.x) - parseFloat(coord.x);
-                        middleRect.setAttributeNS(
-                            null,
-                            'width',
-                            parseFloat(initialStateDragStart.w) + parseFloat(dt)
-                        );
-                        middleRect.setAttributeNS(
-                            null,
-                            'x',
-                            initialStateDragStart.middleRectStartX - dt
-                        );
-                        startCircle.setAttributeNS(
-                            null,
-                            'cx',
-                            coord.x - initialStateDragStart.offsetX
-                        );
-                        arrowStart.setAttributeNS(
-                            null,
-                            'x',
-                            coord.x - initialStateDragStart.arrowOffsetX
-                        );
+                        var dt = parseFloat(initialStateDragStart.x) - parseFloat(coord.x);
+                        middleRect.setAttributeNS(null, 'width', parseFloat(initialStateDragStart.w) + parseFloat(dt));
+                        middleRect.setAttributeNS(null, 'x', initialStateDragStart.middleRectStartX - dt);
+                        startCircle.setAttributeNS(null, 'cx', coord.x - initialStateDragStart.offsetX);
+                        arrowStart.setAttributeNS(null, 'x', coord.x - initialStateDragStart.arrowOffsetX);
+                        //TBD fix this calc
+                        var txtX = parseFloat(middleRect.getAttributeNS(null, 'x')) + middleRect.getAttributeNS(null, 'width') / 2 + 10
+                        text.setAttributeNS(null, 'x', txtX);
                     } else {
-                        var startX =
-                            parseFloat(startCircle.getAttributeNS(null, 'cx')) - h / 2;
-                        console.log('startX:' + startX);
+                        var startX = parseFloat(startCircle.getAttributeNS(null, 'cx')) - h / 2;
+                        //console.log('startX:' + startX);
                         var dtStart = parseInt(startX % roundSize) * -1;
-                        arrowStart.setAttributeNS(
-                            null,
-                            'x',
-                            xEndArrowBefore + dtStart
-                        );
-                        var startCircleX = parseFloat(
-                            startCircle.getAttributeNS(null, 'cx')
-                        );
-                        startCircle.setAttributeNS(
-                            null,
-                            'cx',
-                            startCircleX + dtStart
-                        );
-                        var startMiddleRectX = parseFloat(
-                            middleRect.getAttributeNS(null, 'x')
-                        );
-                        middleRect.setAttributeNS(
-                            null,
-                            'x',
-                            startMiddleRectX + dtStart
-                        );
-                        var middleRectWidth = parseFloat(
-                            middleRect.getAttributeNS(null, 'width')
-                        );
-                        middleRect.setAttributeNS(
-                            null,
-                            'width',
-                            middleRectWidth + dtStart * -1
-                        );
+                        arrowStart.setAttributeNS(null, 'x', xEndArrowBefore + dtStart);
+                        var startCircleX = parseFloat(startCircle.getAttributeNS(null, 'cx'));
+                        startCircle.setAttributeNS(null, 'cx', startCircleX + dtStart);
+                        var startMiddleRectX = parseFloat(middleRect.getAttributeNS(null, 'x'));
+                        middleRect.setAttributeNS(null, 'x', startMiddleRectX + dtStart);
+                        var middleRectWidth = parseFloat(middleRect.getAttributeNS(null, 'width'));
+                        middleRect.setAttributeNS(null, 'width', middleRectWidth + dtStart * -1);
                     }
                 }
                 if (endCircleSelected) {
                     //console.log('handle drag end: coord.x: ' + coord.x);
-                    var dtLocal =
-                        parseFloat(coord.x) - parseFloat(initialStateDragEnd.x);
-                    middleRect.setAttributeNS(
-                        null,
-                        'width',
-                        parseFloat(initialStateDragEnd.w) + parseFloat(dtLocal)
-                    );
-                    endCircle.setAttributeNS(
-                        null,
-                        'cx',
-                        coord.x - initialStateDragEnd.offsetX
-                    );
-                    var xEndArrowBefore = parseFloat(
-                        arrowEnd.getAttributeNS(null, 'x')
-                    );
-                    arrowEnd.setAttributeNS(
-                        null,
-                        'x',
-                        coord.x - initialStateDragEnd.arrowOffsetX
-                    );
+                    var dtLocal = parseFloat(coord.x) - parseFloat(initialStateDragEnd.x);
+                    middleRect.setAttributeNS(null, 'width', parseFloat(initialStateDragEnd.w) + parseFloat(dtLocal));
+
+                    //TBD fix this calc
+                    var txtX = parseFloat(middleRect.getAttributeNS(null, 'x')) + middleRect.getAttributeNS(null, 'width') / 2 + 10
+                    text.setAttributeNS(null, 'x', txtX);
+
+                    endCircle.setAttributeNS(null, 'cx', coord.x - initialStateDragEnd.offsetX);
+                    var xEndArrowBefore = parseFloat(arrowEnd.getAttributeNS(null, 'x'));
+                    arrowEnd.setAttributeNS(null, 'x', coord.x - initialStateDragEnd.arrowOffsetX);
                 }
                 if (centerRect || extern) {
                     if (!offset) {
@@ -346,19 +312,17 @@ function GanttItemsFactory() {
                     // }
                     var xAfter = parseFloat(middleRect.getAttributeNS(null, 'x'));
                     var dt = xAfter - xBefore;
-                    var xStartCircle = parseFloat(
-                        startCircle.getAttributeNS(null, 'cx')
-                    );
+
+                    var xStartCircle = parseFloat(startCircle.getAttributeNS(null, 'cx'));
                     startCircle.setAttributeNS(null, 'cx', xStartCircle + dt);
 
-                    var xEndCircle = parseFloat(
-                        endCircle.getAttributeNS(null, 'cx')
-                    );
+                    var xStartText = parseFloat(text.getAttributeNS(null, 'x'));
+                    text.setAttributeNS(null, 'x', xStartText + dt);
+
+                    var xEndCircle = parseFloat(endCircle.getAttributeNS(null, 'cx'));
                     endCircle.setAttributeNS(null, 'cx', xEndCircle + dt);
 
-                    var xStartArrow = parseFloat(
-                        arrowStart.getAttributeNS(null, 'x')
-                    );
+                    var xStartArrow = parseFloat(arrowStart.getAttributeNS(null, 'x'));
                     arrowStart.setAttributeNS(null, 'x', xStartArrow + dt);
 
                     var xEndArrow = parseFloat(arrowEnd.getAttributeNS(null, 'x'));
@@ -417,6 +381,7 @@ function GanttItemsFactory() {
             container.appendChild(circleEnd);
             container.appendChild(startArrow);
             container.appendChild(endArrow);
+            container.appendChild(textEle);
         }.bind(this);
 
         return {
@@ -429,6 +394,7 @@ function GanttItemsFactory() {
                     circleEnd,
                     startArrow,
                     endArrow,
+                    textEle,
                     options.h
                 );
             }

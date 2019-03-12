@@ -126,22 +126,24 @@
 
     var elementsDragger = [];
 
-    for (var i = 0; i < 10; i++) {
-      var options = {
-        x: XX,
-        y: YY,
-        h: HEIGHT,
-        w: WIDTH
-      };
+    setTimeout(() => {
+      for (var i = 0; i < 10; i++) {
+        var options = {
+          x: XX,
+          y: YY,
+          h: HEIGHT,
+          w: WIDTH
+        };
+        var res = ganttFactory.createTask(options, ROOT);
+        res.draw(ROOT);
+        elementsDragger.push(res.draggable(ROOT));
+        YY += HEIGHT;
+        XX += 10;
+      }
+    }, 10);
 
-      var res = ganttFactory.createTask(options);
-      res.draw(ROOT);
-      elementsDragger.push(res.draggable(ROOT));
 
-      YY += HEIGHT;
-      XX += 10;
-    }
-
+    //TBD: Move all drag all events to the layoutManager
     ROOT.addEventListener('mousemove', dragAll);
     ROOT.addEventListener('mousedown', startDragAll);
     ROOT.addEventListener('mouseup', stopDragAll);
@@ -191,75 +193,6 @@
         offsetAll.s = currentX;
       }
     }
-
-    // function addTask(container, x, y, h, w, color) {
-    //   var rect = document.createElementNS(svgns, 'rect');
-    //   var color = '#' + Math.round(0xffffff * Math.random()).toString(16);
-    //   rect.setAttributeNS(null, 'x', x);
-    //   rect.setAttributeNS(null, 'y', y);
-    //   rect.setAttributeNS(null, 'height', h);
-    //   rect.setAttributeNS(null, 'width', w);
-    //   rect.setAttributeNS(null, 'fill', color);
-    //   //rect.setAttributeNS(null, 'filter', "url(#sofGlow)");
-    //   rect.setAttributeNS(null, 'class', 'glower');
-    //   container.appendChild(rect);
-
-    //   var circleStart = document.createElementNS(svgns, 'circle');
-    //   circleStart.setAttributeNS(null, 'cx', x);
-    //   circleStart.setAttributeNS(null, 'cy', y + h / 2);
-    //   circleStart.setAttributeNS(null, 'r', h / 2);
-    //   //circle.setAttributeNS(null, 'style', 'fill: none; stroke: blue; stroke-width: 1px;' );
-    //   circleStart.setAttributeNS(null, 'fill', color);
-    //   circleStart.setAttributeNS(null, 'class', 'hoverEffect');
-    //   container.appendChild(circleStart);
-
-    //   var circleEnd = document.createElementNS(svgns, 'circle');
-    //   circleEnd.setAttributeNS(null, 'cx', x + w);
-    //   circleEnd.setAttributeNS(null, 'cy', y + h / 2);
-    //   circleEnd.setAttributeNS(null, 'r', h / 2);
-    //   circleEnd.setAttributeNS(null, 'class', 'hoverEffect');
-    //   //circleEnd.setAttributeNS(null, 'style', 'fill: none; stroke: blue; stroke-width: 1px;' );
-    //   circleEnd.setAttributeNS(null, 'fill', color);
-
-    //   //circleStart.style.stroke = 'black';
-    //   circleStart.style.stroke.width = '3';
-    //   //circleEnd.style.stroke = 'black';
-    //   //circleEnd.style.stroke.width = '3';
-    //   container.appendChild(circleEnd);
-
-    //   var scale = 1;
-
-    //   var startArrow = createUseElement({
-    //     x: x - 10,
-    //     y: y + h / 2 - 10,
-    //     href: 'arrowLeft',
-    //     fillId: 'myGradient',
-    //     scale: scale
-    //   });
-    //   container.appendChild(startArrow);
-
-    //   var endArrow = createUseElement({
-    //     x: x + w - 10,
-    //     y: y + h / 2 - 10,
-    //     href: 'arrowRight',
-    //     fillId: 'myGradient',
-    //     scale: scale
-    //   });
-    //   container.appendChild(endArrow);
-    //   var options = {
-    //     scale: 1
-    //   };
-    //   return makeDraggable(
-    //     container,
-    //     rect,
-    //     circleStart,
-    //     circleEnd,
-    //     startArrow,
-    //     endArrow,
-    //     h,
-    //     options
-    //   );
-    // }
   </script>
 </body>
 
